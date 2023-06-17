@@ -9,18 +9,31 @@ bl_info = {
     "doc_url": "",
     "category": "Add Mesh"
 }
-
 import bpy 
 import os 
-
 model_directory = "/home/hieunguyen/Documents/Blender_ghibli_addon/model/"
-
-class SimpleOperator(bpy.types.Operator):
+class AddDaisy(bpy.types.Operator):
     bl_idname = "object.simple_operator"
     bl_label = "Simple Object Operator"
 
     def execute(self, context):
         file_loc = model_directory + "daisy.obj"
+        imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+        return {'FINISHED'}
+class AddClover(bpy.types.Operator):
+    bl_idname = "object.simple_operator"
+    bl_label = "Simple Object Operator"
+
+    def execute(self, context):
+        file_loc = model_directory + "clover.obj"
+        imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+        return {'FINISHED'}
+class AddGrass(bpy.types.Operator):
+    bl_idname = "object.simple_operator"
+    bl_label = "Simple Object Operator"
+
+    def execute(self, context):
+        file_loc = model_directory + "grass.obj"
         imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
         return {'FINISHED'}
 
@@ -34,8 +47,8 @@ class MainPanel(bpy.types.Panel):
     def draw (self, context):
         layout = self.layout
         row = layout.row()
-        row.label(text = "Daisy", icon = 'CUBE')
-        row.operator("mesh.primitive_cube_add")
+        #row.label(text = "Cube", icon = 'CUBE')
+        #row.operator("mesh.primitive_cube_add")
         
 class FlowerPanel(bpy.types.Panel):
     bl_label = "Flower"
@@ -46,18 +59,23 @@ class FlowerPanel(bpy.types.Panel):
     bl_parent_id = "MainPanel"
     bl_options = {'DEFAULT_CLOSED'}
     def import_object (self):
-#        file_loc = "/home/hieunguyen/Documents/Blender/daisy.obj"
-#        imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
         bpy.ops.file.make_paths_absolute()
         return {'FINISHED'}
+    
     def draw (self, context):
         layout = self.layout
         row = layout.row()
         row.label(text = "Daisy", icon = 'FREEZE')
-        row.operator(SimpleOperator.bl_idname, text = "Add")
-        
+        row.operator(AddDaisy.bl_idname, text = "Add")
+        row = layout.row()
+        row.label(text = "Clover", icon = 'FREEZE')
+        row.operator(AddClover.bl_idname, text = "Add")
+        row = layout.row()
+        row.label(text = "Grass", icon = 'FREEZE')
+        row.operator(AddGrass.bl_idname, text = "Add")
+          
    
-classes = (MainPanel, FlowerPanel, SimpleOperator)   
+classes = (MainPanel, FlowerPanel, AddDaisy, AddClover)   
      
 def register():
     for cls in classes:
